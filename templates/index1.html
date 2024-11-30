@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="{{ url_for('static', filename='jose_chancay_curriculum.html') }}">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    
+    <title>MI CLIMA - JOSE CHANCAY</title>
+</head>
+
+<body style="background-color:rgb(6, 9, 10);">
+
+    <style>
+        #principal{
+                border: solid 2px blue;
+                width: 100%;
+                margin: 0 auto;
+                padding: 5px;
+                background: url("/images/fondo1.gif");
+          }
+          #map {
+	        height: 500px;
+	        width: 80%;
+        }
+        .contenedor2{
+            display: flex;
+        }
+      
+      </style>
+
+
+    <div class="container" id="principal">
+        <br>
+        <br>
+        <h1 class="animate__animated animate__flip" style="text-align: center;" >
+            <FONT COLOR="white">CONSULTA EL CLIMA EN CUALQUIER CIUDAD</font>
+        </h1>
+        <br>
+        <form method="post">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="txtCiudad" id="txtCiudad"
+                    placeholder="Aqui escribe la ciudad para conocer el clima">
+            </div>
+            <center>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-brightness-high"></i>
+                    PRESIONA AQUI PARA INICIAR TU BUSQUEDA
+                    <i class="bi bi-cloud-drizzle"></i>
+                </button>
+            </center>
+
+
+        </form>
+        <br>
+        
+        <div class="contenedor2">
+        <!-- Carta del clima de la ciudad -->
+            {% if cod == 200 %}
+            <div class="card animate__animated animate__backInLeft" style="width: 18rem;">
+                <img src="http://openweathermap.org/img/w/{{ icon }}.png" alt="icon" style="width: 50px;">
+                <!-- <img src="http://openweathermap.org/img/w/01n.png" class="card-img-top" alt="..."> -->
+                <div class="card-body">
+                    <h4 class="card-title">{{ ciudad }}</h4>
+                    <p class="card-text">Temperatura: {{temperatura}}°</p>
+                    <p class="card-text">Humedad : {{humedad}} % </p>
+                    <p class="card-text">Presion : {{presion}} hPa</p>
+                    <p class="card-text">Descripcion : {{descripcion}}</p>
+                    <!-- <a href="#" class="btn btn-primary">Agregar</a> -->
+                </div>
+            </div>
+            
+        <div id="map" class="map">
+            <script>
+                function iniciarMap()
+                {
+                    var coord = {lat:  {{lat}},lng:{{lon}} };
+                    var map = new google.maps.Map(document.getElementById('map'),{
+                    zoom: 10,
+                    center: coord
+                    });
+                    var marker = new google.maps.Marker({
+                    position: coord,
+                        map: map
+                    });
+                }
+            </script>
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDaeWicvigtP9xPv919E-RNoxfvC-Hqik&callback=iniciarMap"></script>
+        </div>
+        
+        {% endif %}
+        </div>
+        {% if cod == '404' %}
+        <h1>NO EXISTE CONSULTA</h1>
+        {% endif %}
+
+
+    </div>
+</body>
+<footer class="bg-info text-center text-lg-start fixed-bottom">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2024 Copyright:
+        <a class="text-dark" href="{{ url_for('jose_chancay_curriculum') }}" target="_blank">JOSE LUIS CHANCAY RODRIGUEZ</a>
+    </div>
+</footer>
+
+</html>
